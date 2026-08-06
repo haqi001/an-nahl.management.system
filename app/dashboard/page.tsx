@@ -1,27 +1,28 @@
-import Sidebar from "@/components/layout/Sidebar";
-import Topbar from "@/components/layout/Topbar";
-import PageHeader from "@/components/common/PageHeader";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import RecentActivities from "@/components/dashboard/RecentActivities";
+import QuickActions from "@/components/dashboard/QuickActions";
 
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen bg-slate-100">
-      <Sidebar />
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold">
+          Dashboard
+        </h1>
 
-      <div className="flex flex-1 flex-col">
-        <Topbar />
+        <p className="text-slate-500">
+          Selamat datang di An-Nahl Management System.
+        </p>
+      </div>
 
-        <main className="space-y-8 p-8">
-          <PageHeader
-            title="Dashboard"
-            description="Kelola seluruh aktivitas organisasi."
-          />
+      <DashboardStats />
 
-          <DashboardStats />
-
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
           <RecentActivities />
-        </main>
+        </div>
+
+        <QuickActions />
       </div>
     </div>
   );

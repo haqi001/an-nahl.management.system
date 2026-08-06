@@ -1,41 +1,44 @@
 import StatCard from "@/components/common/StatCard";
+
 import {
   Users,
-  FolderOpen,
-  CalendarDays,
   Wallet,
+  CalendarDays,
+  Trophy,
 } from "lucide-react";
 
 export default function DashboardStats() {
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
       <StatCard
-        title="Total Anggota"
-        value={28}
-        description="+2 anggota baru"
+        title="Total Members"
+        value="128"
+        description="Active members"
         icon={Users}
       />
 
       <StatCard
-        title="Total Arsip"
-        value={145}
-        description="+5 dokumen"
-        icon={FolderOpen}
+        title="Cash Flow"
+        value="Rp 5.250.000"
+        description="Current balance"
+        icon={Wallet}
       />
 
       <StatCard
-        title="Program Kerja"
-        value={12}
-        description="4 agenda bulan ini"
+        title="Upcoming Events"
+        value="12"
+        description="Events this month"
         icon={CalendarDays}
       />
 
       <StatCard
-        title="Saldo Kas"
-        value="Rp 8.750.000"
-        description="Update hari ini"
-        icon={Wallet}
+        title="Competitions"
+        value="4"
+        description="Active competitions"
+        icon={Trophy}
       />
+
     </div>
   );
 }

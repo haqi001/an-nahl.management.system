@@ -1,31 +1,45 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 const activities = [
-  "Anggota baru: Ahmad Fauzi",
-  "Dokumen AD/ART diunggah",
-  "Kas masuk Rp500.000",
-  "Program Kerja Ramadhan diperbarui",
+  {
+    title: "Member baru ditambahkan",
+    time: "10 menit yang lalu",
+  },
+  {
+    title: "Pembayaran kas diterima",
+    time: "30 menit yang lalu",
+  },
+  {
+    title: "Agenda Pengajian dibuat",
+    time: "1 jam yang lalu",
+  },
+  {
+    title: "Dokumen arsip diunggah",
+    time: "Kemarin",
+  },
 ];
 
 export default function RecentActivities() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Aktivitas Terbaru</CardTitle>
-      </CardHeader>
+    <div className="rounded-xl border bg-white p-6 shadow-sm">
+      <h2 className="mb-5 text-lg font-semibold">
+        Recent Activities
+      </h2>
 
-      <CardContent>
-        <ul className="space-y-3">
-          {activities.map((activity, index) => (
-            <li
-              key={index}
-              className="border-b pb-2 text-sm text-slate-600 last:border-none"
-            >
-              {activity}
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+      <div className="space-y-4">
+        {activities.map((activity, index) => (
+          <div
+            key={index}
+            className="border-b pb-3 last:border-none"
+          >
+            <p className="font-medium">
+              {activity.title}
+            </p>
+
+            <p className="text-sm text-slate-500">
+              {activity.time}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

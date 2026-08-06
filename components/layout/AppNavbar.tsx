@@ -1,6 +1,6 @@
-export default function Topbar() {
+export default function AppNavbar() {
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-white px-6">
+    <header className="h-16 border-b bg-white flex items-center justify-between px-6">
       <h1 className="text-lg font-semibold">
         An-Nahl Management System
       </h1>
