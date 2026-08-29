@@ -8,11 +8,12 @@ function createDriveClient(
   accessToken: string,
   refreshToken?: string
 ) {
-  const auth = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
-  );
+  const auth =
+    new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      process.env.GOOGLE_REDIRECT_URI
+    );
 
   auth.setCredentials({
     access_token: accessToken,
@@ -55,7 +56,6 @@ export async function refreshDriveAccessToken(
   return {
     accessToken:
       credentials.access_token,
-
     expiresIn:
       credentials.expiry_date
         ? Math.max(
@@ -102,9 +102,7 @@ export async function getValidDriveAccessToken(
   return {
     accessToken:
       refreshed.accessToken,
-
     refreshed: true,
-
     expiresIn:
       refreshed.expiresIn,
   };
@@ -127,12 +125,9 @@ async function getOrCreateRootFolder(
         "mimeType = 'application/vnd.google-apps.folder'",
         "trashed = false",
       ].join(" and "),
-
       fields:
         "files(id,name,mimeType,webViewLink)",
-
       spaces: "drive",
-
       pageSize: 1,
     });
 
@@ -147,16 +142,47 @@ async function getOrCreateRootFolder(
     await drive.files.create({
       requestBody: {
         name: ROOT_FOLDER_NAME,
-
         mimeType:
           "application/vnd.google-apps.folder",
       },
-
       fields:
         "id,name,mimeType,webViewLink",
     });
 
   return folder.data;
+}
+
+export async function listDriveFiles(
+  accessToken: string,
+  refreshToken?: string
+) {
+  if (!accessToken) {
+    throw new Error(
+      "Google access token tidak ditemukan."
+    );
+  }
+
+  const drive =
+    createDriveClient(
+      accessToken,
+      refreshToken
+    );
+
+  const result =
+    await drive.files.list({
+      q: [
+        "trashed = false",
+        "mimeType != 'application/vnd.google-apps.folder'",
+      ].join(" and "),
+      fields:
+        "files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink,webContentLink,parents)",
+      orderBy:
+        "createdTime desc",
+      pageSize: 100,
+      spaces: "drive",
+    });
+
+  return result.data.files ?? [];
 }
 
 export async function uploadDriveFile(
@@ -196,7 +222,6 @@ export async function uploadDriveFile(
     mimeType:
       file.type ||
       "application/octet-stream",
-
     body: Readable.from(buffer),
   };
 
@@ -204,14 +229,11 @@ export async function uploadDriveFile(
     await drive.files.create({
       requestBody: {
         name: file.name,
-
         parents: [
           rootFolder.id,
         ],
       },
-
       media,
-
       fields:
         "id,name,mimeType,size,createdTime,modifiedTime,webViewLink,webContentLink",
     });
@@ -227,8 +249,7 @@ export async function uploadDriveFile(
 
 export async function deleteDriveFile(
   accessToken: string,
-  fileId: string,
-  refreshToken?: string
+  fileId: string
 ) {
   if (!accessToken) {
     throw new Error(
@@ -243,10 +264,7 @@ export async function deleteDriveFile(
   }
 
   const drive =
-    createDriveClient(
-      accessToken,
-      refreshToken
-    );
+    createDriveClient(accessToken);
 
   await drive.files.delete({
     fileId,

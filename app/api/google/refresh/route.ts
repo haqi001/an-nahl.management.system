@@ -5,7 +5,7 @@ import {
 
 import {
   refreshGoogleAccessToken,
-} from "@/services/google-oauth.service";
+} from "@/services/google-auth.service";
 
 export async function GET(
   request: NextRequest

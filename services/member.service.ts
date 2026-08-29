@@ -11,23 +11,56 @@ import {
 
 import { createActivity } from "@/services/activity.service";
 
-export async function getMembers() {
-  const snapshot = await getDocs(
-    collection(db, "members")
-  );
+import { Member } from "@/types/member";
 
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+export async function getMembers(): Promise<
+  Member[]
+> {
+  const snapshot =
+    await getDocs(
+      collection(db, "members")
+    );
+
+  return snapshot.docs.map(
+    (document) => {
+      const data =
+        document.data();
+
+      return {
+        id: document.id,
+        name:
+          typeof data.name ===
+          "string"
+            ? data.name
+            : "",
+        nim:
+          typeof data.nim ===
+          "string"
+            ? data.nim
+            : "",
+        division:
+          typeof data.division ===
+          "string"
+            ? data.division
+            : "",
+        status:
+          data.status ===
+          "Inactive"
+            ? "Inactive"
+            : "Active",
+      };
+    }
+  );
 }
 
-export async function createMember(data: {
-  name: string;
-  nim: string;
-  division: string;
-  status: string;
-}) {
+export async function createMember(
+  data: {
+    name: string;
+    nim: string;
+    division: string;
+    status: string;
+  }
+) {
   await addDoc(
     collection(db, "members"),
     data
@@ -37,7 +70,8 @@ export async function createMember(data: {
     module: "Member",
     action: "Created",
     title: "Member Created",
-    description: `${data.name} ditambahkan sebagai member.`,
+    description:
+      `${data.name} ditambahkan sebagai member.`,
   });
 }
 
@@ -50,11 +84,12 @@ export async function updateMember(
     status: string;
   }
 ) {
-  const memberRef = doc(
-    db,
-    "members",
-    id
-  );
+  const memberRef =
+    doc(
+      db,
+      "members",
+      id
+    );
 
   await updateDoc(
     memberRef,
@@ -65,25 +100,30 @@ export async function updateMember(
     module: "Member",
     action: "Updated",
     title: "Member Updated",
-    description: `${data.name} diperbarui.`,
+    description:
+      `${data.name} diperbarui.`,
   });
 }
 
 export async function deleteMember(
   id: string
 ) {
-  const memberRef = doc(
-    db,
-    "members",
-    id
-  );
+  const memberRef =
+    doc(
+      db,
+      "members",
+      id
+    );
 
-  await deleteDoc(memberRef);
+  await deleteDoc(
+    memberRef
+  );
 
   await createActivity({
     module: "Member",
     action: "Deleted",
     title: "Member Deleted",
-    description: `Member dengan ID ${id} dihapus.`,
+    description:
+      `Member dengan ID ${id} dihapus.`,
   });
 }

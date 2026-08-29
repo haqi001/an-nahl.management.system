@@ -13,7 +13,7 @@ import {
 
 import {
   CashFlow,
-} from "@/types/cash-flow";
+} from "@/types/cashflow";
 
 import {
   createActivity,
@@ -46,11 +46,11 @@ export async function createCashFlow(
     );
 
   await createActivity({
-    module: "Cash Flow",
+    module: "CashFlow",
     action: "Created",
     title: "Cash Flow Created",
     description:
-      `${data.type}: ${data.description}`,
+      `${data.category}: ${data.description}`,
   });
 
   return document.id;
@@ -66,11 +66,11 @@ export async function updateCashFlow(
   );
 
   await createActivity({
-    module: "Cash Flow",
+    module: "CashFlow",
     action: "Updated",
     title: "Cash Flow Updated",
     description:
-      `${data.type}: ${data.description}`,
+      `${data.category}: ${data.description}`,
   });
 }
 
@@ -82,7 +82,7 @@ export async function deleteCashFlow(
   );
 
   await createActivity({
-    module: "Cash Flow",
+    module: "CashFlow",
     action: "Deleted",
     title: "Cash Flow Deleted",
     description:

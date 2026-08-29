@@ -33,6 +33,14 @@ export async function POST(
         "google_refresh_token"
       )?.value;
 
+    /*
+     * Pastikan Google Drive memiliki
+     * access token yang valid.
+     *
+     * Jika access token sudah tidak valid
+     * tetapi refresh token tersedia,
+     * service akan memperbaruinya.
+     */
     const authResult =
       await getValidDriveAccessToken(
         accessToken,
@@ -86,6 +94,10 @@ export async function POST(
     const archiveData =
       archiveSnapshot.data();
 
+    /*
+     * storagePath pada archive menyimpan
+     * Google Drive File ID.
+     */
     const driveFileId =
       archiveData.storagePath;
 
@@ -104,24 +116,21 @@ export async function POST(
     }
 
     /*
-     * Hapus file dari Google Drive.
-     *
-     * Access token + refresh token
-     * diberikan ke Google OAuth client.
+     * Hapus file dari Google Drive terlebih dahulu.
      */
     await deleteDriveFile(
       authResult.accessToken,
-      driveFileId,
-      refreshToken
+      driveFileId
     );
 
     /*
-     * Hapus metadata dari Firestore
-     * dan buat activity log.
+     * Setelah file Google Drive berhasil dihapus,
+     * hapus metadata archive dari Firestore.
+     *
+     * deleteArchive hanya menerima archiveId.
      */
     await deleteArchive(
-      archiveId,
-      driveFileId
+      archiveId
     );
 
     const response =
@@ -132,8 +141,9 @@ export async function POST(
       });
 
     /*
-     * Jika access token diperbarui,
-     * simpan token baru ke cookie.
+     * Jika access token diperbarui oleh
+     * getValidDriveAccessToken(), simpan
+     * token baru ke cookie.
      */
     if (authResult.refreshed) {
       response.cookies.set(

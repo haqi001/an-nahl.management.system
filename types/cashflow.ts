@@ -1,8 +1,6 @@
-export type CashFlowType =
-  | "Income"
-  | "Expense";
-
 export type CashFlowCategory =
+  | "Income"
+  | "Expense"
   | "Membership"
   | "Fundraising"
   | "Sponsorship"
@@ -18,10 +16,9 @@ export type CashFlowCategory =
 
 export interface CashFlow {
   id: string;
-  date: string;
-  type: CashFlowType;
+  title: string;
   category: CashFlowCategory;
-  description: string;
   amount: number;
-  createdAt: string;
+  date: string;
+  description: string;
 }
