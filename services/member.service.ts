@@ -1,4 +1,5 @@
 import { db } from "@/firebase/config";
+
 import {
   collection,
   getDocs,
@@ -7,6 +8,8 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+
+import { createActivity } from "@/services/activity.service";
 
 export async function getMembers() {
   const snapshot = await getDocs(
@@ -25,7 +28,17 @@ export async function createMember(data: {
   division: string;
   status: string;
 }) {
-  await addDoc(collection(db, "members"), data);
+  await addDoc(
+    collection(db, "members"),
+    data
+  );
+
+  await createActivity({
+    module: "Member",
+    action: "Created",
+    title: "Member Created",
+    description: `${data.name} ditambahkan sebagai member.`,
+  });
 }
 
 export async function updateMember(
@@ -37,13 +50,40 @@ export async function updateMember(
     status: string;
   }
 ) {
-  const memberRef = doc(db, "members", id);
+  const memberRef = doc(
+    db,
+    "members",
+    id
+  );
 
-  await updateDoc(memberRef, data);
+  await updateDoc(
+    memberRef,
+    data
+  );
+
+  await createActivity({
+    module: "Member",
+    action: "Updated",
+    title: "Member Updated",
+    description: `${data.name} diperbarui.`,
+  });
 }
 
-export async function deleteMember(id: string) {
-  const memberRef = doc(db, "members", id);
+export async function deleteMember(
+  id: string
+) {
+  const memberRef = doc(
+    db,
+    "members",
+    id
+  );
 
   await deleteDoc(memberRef);
+
+  await createActivity({
+    module: "Member",
+    action: "Deleted",
+    title: "Member Deleted",
+    description: `Member dengan ID ${id} dihapus.`,
+  });
 }

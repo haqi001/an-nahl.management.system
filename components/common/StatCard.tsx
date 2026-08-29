@@ -6,6 +6,8 @@ interface StatCardProps {
   value: string | number;
   description: string;
   icon: LucideIcon;
+  iconBackground?: string;
+  iconColor?: string;
 }
 
 export default function StatCard({
@@ -13,30 +15,32 @@ export default function StatCard({
   value,
   description,
   icon: Icon,
+  iconBackground = "bg-emerald-100",
+  iconColor = "text-emerald-600",
 }: StatCardProps) {
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="overflow-hidden">
       <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-
-          <div>
-            <p className="text-sm text-slate-500">
-              {title}
-            </p>
-
-            <h2 className="mt-2 text-3xl font-bold">
-              {value}
-            </h2>
-
-            <p className="mt-2 text-sm text-slate-500">
-              {description}
-            </p>
+        <div className="flex flex-col">
+          <div
+            className={`flex h-14 w-14 items-center justify-center rounded-xl ${iconBackground}`}
+          >
+            <Icon
+              className={`h-7 w-7 ${iconColor}`}
+            />
           </div>
 
-          <div className="rounded-xl bg-emerald-100 p-3">
-            <Icon className="h-6 w-6 text-emerald-600" />
-          </div>
+          <p className="mt-5 text-sm text-slate-500">
+            {title}
+          </p>
 
+          <h2 className="mt-2 break-words text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
+            {value}
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-500">
+            {description}
+          </p>
         </div>
       </CardContent>
     </Card>

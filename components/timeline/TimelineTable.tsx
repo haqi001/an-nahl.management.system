@@ -1,25 +1,26 @@
-import { Member } from "@/types/member";
+import { Timeline } from "@/types/timeline";
 
-import MemberModal from "./MemberModal";
-import DeleteMemberModal from "./DeleteMemberModal";
+import TimelineModal from "./TimelineModal";
+import DeleteTimelineModal from "./DeleteTimelineModal";
 
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
+import FormatDate from "@/components/common/FormatDate";
 
-interface MemberTableProps {
-  members: Member[];
+interface TimelineTableProps {
+  timelines: Timeline[];
 }
 
-export default function MemberTable({
-  members,
-}: MemberTableProps) {
-  if (members.length === 0) {
+export default function TimelineTable({
+  timelines,
+}: TimelineTableProps) {
+  if (timelines.length === 0) {
     return (
       <EmptyState
-        icon="👥"
-        title="No Members Found"
-        description="Click + Add Member to create your first member."
-        action={<MemberModal />}
+        icon="📅"
+        title="No Timeline Found"
+        description="Click + Add Timeline to create your first agenda."
+        action={<TimelineModal />}
       />
     );
   }
@@ -30,19 +31,23 @@ export default function MemberTable({
         <thead className="bg-slate-100">
           <tr>
             <th className="px-4 py-3 text-left">
-              Name
+              Title
             </th>
 
             <th className="px-4 py-3 text-left">
-              Division
+              Department
+            </th>
+
+            <th className="px-4 py-3 text-left">
+              Date
+            </th>
+
+            <th className="px-4 py-3 text-left">
+              Location
             </th>
 
             <th className="px-4 py-3 text-left">
               Status
-            </th>
-
-            <th className="px-4 py-3 text-left">
-              NIM
             </th>
 
             <th className="px-4 py-3 text-left">
@@ -52,38 +57,44 @@ export default function MemberTable({
         </thead>
 
         <tbody>
-          {members.map((member) => (
+          {timelines.map((timeline) => (
             <tr
-              key={member.id}
+              key={timeline.id}
               className="border-t"
             >
               <td className="px-4 py-3">
-                {member.name}
+                {timeline.title}
               </td>
 
               <td className="px-4 py-3">
-                {member.division}
+                {timeline.department}
               </td>
 
               <td className="px-4 py-3">
-                <StatusBadge
-                  status={member.status}
+                <FormatDate
+                  date={timeline.date}
                 />
               </td>
 
               <td className="px-4 py-3">
-                {member.nim}
+                {timeline.location}
+              </td>
+
+              <td className="px-4 py-3">
+                <StatusBadge
+                  status={timeline.status}
+                />
               </td>
 
               <td className="px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <MemberModal
+                  <TimelineModal
                     mode="edit"
-                    member={member}
+                    timeline={timeline}
                   />
 
-                  <DeleteMemberModal
-                    member={member}
+                  <DeleteTimelineModal
+                    timeline={timeline}
                   />
                 </div>
               </td>

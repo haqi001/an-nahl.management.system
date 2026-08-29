@@ -1,26 +1,47 @@
+import Link from "next/link";
+
 export default function QuickActions() {
   return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="mb-5 text-lg font-semibold">
+    <div>
+      <h2 className="text-lg font-bold text-slate-800">
         Quick Actions
       </h2>
 
-      <div className="grid gap-3">
-        <button className="rounded-lg bg-emerald-600 px-4 py-3 text-white hover:bg-emerald-700">
+      <div className="mt-4 grid gap-3">
+        <Link
+          href="/dashboard/members"
+          className="rounded-lg bg-emerald-600 px-4 py-3 text-center text-white hover:bg-emerald-700"
+        >
           + Tambah Member
-        </button>
+        </Link>
 
-        <button className="rounded-lg bg-blue-600 px-4 py-3 text-white hover:bg-blue-700">
+        <Link
+          href="/dashboard/timeline"
+          className="rounded-lg bg-blue-600 px-4 py-3 text-center text-white hover:bg-blue-700"
+        >
           + Tambah Event
-        </button>
+        </Link>
 
-        <button className="rounded-lg bg-orange-600 px-4 py-3 text-white hover:bg-orange-700">
+        <Link
+          href="/dashboard/cashflow"
+          className="rounded-lg bg-orange-600 px-4 py-3 text-center text-white hover:bg-orange-700"
+        >
           + Tambah Kas
-        </button>
+        </Link>
 
-        <button className="rounded-lg bg-slate-700 px-4 py-3 text-white hover:bg-slate-800">
+        <Link
+          href="/dashboard/competitions"
+          className="rounded-lg bg-violet-600 px-4 py-3 text-center text-white hover:bg-violet-700"
+        >
+          + Tambah Competition
+        </Link>
+
+        <Link
+          href="/dashboard/archive"
+          className="rounded-lg bg-slate-700 px-4 py-3 text-center text-white hover:bg-slate-800"
+        >
           + Upload Arsip
-        </button>
+        </Link>
       </div>
     </div>
   );
