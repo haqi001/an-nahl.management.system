@@ -1,11 +1,12 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function Hero() {
   return (
-    <section className="flex items-center justify-center py-24 px-6">
-      <Card className="max-w-4xl w-full p-10 text-center shadow-xl rounded-2xl">
-
+    <section className="flex items-center justify-center px-6 py-24">
+      <Card className="w-full max-w-4xl rounded-2xl p-10 text-center shadow-xl">
         <h1 className="text-5xl font-bold text-emerald-800">
           An-Nahl Management System
         </h1>
@@ -19,17 +20,16 @@ export default function Hero() {
         </p>
 
         <div className="mt-10 flex justify-center gap-4">
-
-          <Button size="lg">
-            Masuk
-          </Button>
+          <Link href="/login">
+            <Button size="lg">
+              Masuk
+            </Button>
+          </Link>
 
           <Button variant="outline" size="lg">
             Informasi Publik
           </Button>
-
         </div>
-
       </Card>
     </section>
   );
