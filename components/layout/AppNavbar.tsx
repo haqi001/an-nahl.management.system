@@ -1,42 +1,41 @@
 "use client";
 
-import { useState } from "react";
-import { signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { signOut, onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
 
 import { auth } from "@/firebase/config";
+import { Button } from "@/components/ui/button";
 
 export default function AppNavbar() {
   const router = useRouter();
 
-  const [isLoggingOut, setIsLoggingOut] =
-    useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (currentUser) => {
+        setUser(currentUser);
+      }
+    );
+
+    return unsubscribe;
+  }, []);
 
   async function handleLogout() {
-    if (isLoggingOut) {
-      return;
-    }
+    setLoading(true);
 
     try {
-      setIsLoggingOut(true);
-
       await signOut(auth);
-
       router.replace("/login");
     } catch (error) {
-      console.error(
-        "Logout error:",
-        error
-      );
-
-      setIsLoggingOut(false);
+      console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
     }
   }
-
-  const userEmail =
-    auth.currentUser?.email ??
-    "Administrator";
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6">
@@ -51,22 +50,18 @@ export default function AppNavbar() {
           </p>
 
           <p className="text-xs text-slate-500">
-            {userEmail}
+            {user?.email ?? "User"}
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={handleLogout}
-          disabled={isLoggingOut}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={loading}
         >
-          <LogOut className="h-4 w-4" />
-
-          {isLoggingOut
-            ? "Keluar..."
-            : "Keluar"}
-        </button>
+          {loading ? "Keluar..." : "Keluar"}
+        </Button>
       </div>
     </header>
   );
