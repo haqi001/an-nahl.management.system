@@ -6,6 +6,12 @@ import DeleteMemberModal from "./DeleteMemberModal";
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
 
+import { useUserProfile } from "@/components/auth/UserProfileProvider";
+
+import {
+  canAccess,
+} from "@/services/permission.service";
+
 interface MemberTableProps {
   members: Member[];
 }
@@ -13,6 +19,20 @@ interface MemberTableProps {
 export default function MemberTable({
   members,
 }: MemberTableProps) {
+  const {
+    profile,
+    loading: profileLoading,
+  } = useUserProfile();
+
+  const canDelete =
+    !profileLoading &&
+    profile !== null &&
+    canAccess(
+      profile.role,
+      "members",
+      "delete"
+    );
+
   if (members.length === 0) {
     return (
       <EmptyState
@@ -82,9 +102,11 @@ export default function MemberTable({
                     member={member}
                   />
 
-                  <DeleteMemberModal
-                    member={member}
-                  />
+                  {canDelete && (
+                    <DeleteMemberModal
+                      member={member}
+                    />
+                  )}
                 </div>
               </td>
             </tr>

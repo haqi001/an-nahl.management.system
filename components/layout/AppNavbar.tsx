@@ -1,31 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { signOut, onAuthStateChanged, User } from "firebase/auth";
+import { useState } from "react";
+import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
 import { auth } from "@/firebase/config";
+import { useUserProfile } from "@/components/auth/UserProfileProvider";
 import { Button } from "@/components/ui/button";
 
 export default function AppNavbar() {
   const router = useRouter();
 
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const {
+    user,
+    profile,
+    loading: profileLoading,
+  } = useUserProfile();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (currentUser) => {
-        setUser(currentUser);
-      }
-    );
-
-    return unsubscribe;
-  }, []);
+  const [logoutLoading, setLogoutLoading] =
+    useState(false);
 
   async function handleLogout() {
-    setLoading(true);
+    setLogoutLoading(true);
 
     try {
       await signOut(auth);
@@ -33,9 +29,18 @@ export default function AppNavbar() {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      setLoading(false);
+      setLogoutLoading(false);
     }
   }
+
+  const displayName =
+    profile?.name ||
+    user?.email ||
+    "User";
+
+  const displayRole =
+    profile?.role ||
+    "Memuat profil...";
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6">
@@ -46,11 +51,15 @@ export default function AppNavbar() {
       <div className="flex items-center gap-4">
         <div className="text-right">
           <p className="text-sm font-medium text-slate-700">
-            Administrator
+            {profileLoading
+              ? "Memuat..."
+              : displayName}
           </p>
 
           <p className="text-xs text-slate-500">
-            {user?.email ?? "User"}
+            {profileLoading
+              ? "Memuat profil..."
+              : displayRole}
           </p>
         </div>
 
@@ -58,9 +67,14 @@ export default function AppNavbar() {
           variant="outline"
           size="sm"
           onClick={handleLogout}
-          disabled={loading}
+          disabled={
+            logoutLoading ||
+            profileLoading
+          }
         >
-          {loading ? "Keluar..." : "Keluar"}
+          {logoutLoading
+            ? "Keluar..."
+            : "Keluar"}
         </Button>
       </div>
     </header>
